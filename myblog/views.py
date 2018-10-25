@@ -1,10 +1,28 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from .serializers import UserSerializer, GroupSerializer, PostSerializer, CatSerializer
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
 from myblog.models import Post, Category
+from myblog.forms import PostForm
+from django.utils import timezone
+
+
+def add_post(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            model_instance = form.save(commit=False)
+            model_instance.timestamp = timezone.now()
+            model_instance.save()
+            return redirect('/')
+
+    else:
+
+        form = PostForm()
+
+        return render(request, "my_template.html", {'form': form})
 
 
 def stub_view(request, *args, **kwargs):
@@ -49,6 +67,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
 
 class PostViewSet(viewsets.ModelViewSet):
     """
