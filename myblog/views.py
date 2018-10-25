@@ -1,10 +1,10 @@
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from .serializers import UserSerializer, GroupSerializer, PostSerializer, CatSerializer
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
-from myblog.models import Post
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from myblog.serializers import UserSerializer, GroupSerializer, PostSerializer, CatSerializer
+from myblog.models import Post, Category
 
 
 def stub_view(request, *args, **kwargs):
@@ -50,7 +50,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
-
 class PostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -63,5 +62,5 @@ class CatViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = Group.objects.all()
+    queryset = Category.objects.all()
     serializer_class = CatSerializer
